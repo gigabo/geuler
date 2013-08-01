@@ -14,9 +14,10 @@ func largestPrimeFactor(n uint) uint {
 	if isPrime(n) {
 		return n
 	}
-	for i := fact; i <= n/fact; i++ {
+	for i, max := fact, n/fact; i <= max; i++ {
 		if n%i == 0 && isPrime(i) {
 			fact = i
+			max = n / fact
 		}
 	}
 	return fact
