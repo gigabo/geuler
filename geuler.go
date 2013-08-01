@@ -18,9 +18,22 @@ var solutions = map[string]func() string{
 }
 
 func run(n string) string {
-	return fmt.Sprintf("%v:\t%s", n, solutions[n]())
+	solve := solutions[n]
+	solution := "No solution yet!"
+	if solve != nil {
+		solution = solve()
+	}
+	return fmt.Sprintf("%v:\t%s", n, solution)
 }
 
 func main() {
-	fmt.Println(run(os.Args[1]))
+	todo := os.Args[1:]
+	if len(todo) == 0 {
+		for k, _ := range solutions {
+			todo = append(todo, k)
+		}
+	}
+	for _, n := range todo {
+		fmt.Println(run(n))
+	}
 }
