@@ -46,13 +46,13 @@ func run(n string, c chan result) {
 func main() {
 	t0 := time.Now()
 	todo := os.Args[1:]
+	w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
 	var channels []chan result
 	if len(todo) == 0 {
 		for k, _ := range solutions {
 			todo = append(todo, k)
 		}
 	}
-	w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
 	for _, n := range todo {
 		c := make(chan result)
 		channels = append(channels, c)
