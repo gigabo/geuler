@@ -15,6 +15,15 @@ var solutions = map[string]func() string{
 		}
 		return fmt.Sprintf("%d", n)
 	},
+	"2": func() string {
+		n := uint(0)
+		for i := uint(0); fib(i) < 4000000; i++ {
+			if (fib(i) % 2) == 0 {
+				n += fib(i)
+			}
+		}
+		return fmt.Sprintf("%d", n)
+	},
 }
 
 func run(n string) string {
