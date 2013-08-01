@@ -24,6 +24,7 @@ func TestLargestPrimeFactor(t *testing.T) {
 	}{
 		{2, 2}, {3, 3}, {4, 2}, {5, 5}, {6, 3},
 		{7, 7}, {8, 2}, {9, 3}, {10, 5}, {11, 11},
+		{13195, 29}, // This is the PE example.
 	} {
 		f := largestPrimeFactor(test.in)
 		if f != test.out {
