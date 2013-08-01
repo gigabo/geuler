@@ -22,8 +22,14 @@ func fib(n uint) uint {
 func fibGenerator() chan uint {
 	c := make(chan uint)
 	go func() {
-		for i := uint(0); ; i++ {
-			c <- fib(i)
+		a := uint(1)
+		b := uint(0)
+		t := uint(0)
+		for {
+			c <- a
+			t = a
+			a = a + b
+			b = t
 		}
 	}()
 	return c
