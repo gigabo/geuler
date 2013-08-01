@@ -18,3 +18,13 @@ func fib(n uint) uint {
 	memo[n] = res
 	return res
 }
+
+func fibGenerator() chan uint {
+	c := make(chan uint)
+	go func() {
+		for i := uint(0); ; i++ {
+			c <- fib(i)
+		}
+	}()
+	return c
+}

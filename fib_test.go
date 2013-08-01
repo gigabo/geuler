@@ -14,3 +14,14 @@ func TestFib(t *testing.T) {
 		}
 	}
 }
+
+func TestFibGenerator(t *testing.T) {
+	tests := []uint{1, 1, 2, 3, 5, 8, 13}
+	g := fibGenerator()
+	for in, out := range tests {
+		f := <-g
+		if f != out {
+			t.Errorf("fib(%v) != %v [got: %v]", in, out, f)
+		}
+	}
+}
