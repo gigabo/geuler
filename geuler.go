@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"text/tabwriter"
 	"time"
 )
 
@@ -45,8 +46,10 @@ func main() {
 			todo = append(todo, k)
 		}
 	}
+	w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
 	for _, n := range todo {
-		fmt.Println(run(n))
+		fmt.Fprintln(w, run(n))
 	}
-	fmt.Printf("\nTotal:\t%d problems\t%s\n", len(todo), time.Since(t0))
+	fmt.Fprintf(w, "\t\t\nTotal:\t%d problem(s)\t%s\n", len(todo), time.Since(t0))
+	w.Flush()
 }
