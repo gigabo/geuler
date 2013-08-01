@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"text/tabwriter"
@@ -33,19 +34,24 @@ type result struct {
 	time         time.Duration
 }
 
-func run(n string, c chan result) {
+func run(n string) result {
 	t0 := time.Now()
 	solve := solutions[n]
 	solution := "No solution yet!"
 	if solve != nil {
 		solution = solve()
 	}
-	c <- result{n, solution, time.Since(t0)}
+	return result{n, solution, time.Since(t0)}
+}
+func runConcurrent(n string, c chan result) {
+	c <- run(n)
 }
 
 func main() {
+	concurrent := flag.Bool("concurrent", false, "Run concurrently")
+	flag.Parse()
 	t0 := time.Now()
-	todo := os.Args[1:]
+	todo := flag.Args()
 	w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
 	var channels []chan result
 	if len(todo) == 0 {
@@ -53,17 +59,24 @@ func main() {
 			todo = append(todo, k)
 		}
 	}
-	for _, n := range todo {
-		c := make(chan result)
-		channels = append(channels, c)
-		go run(n, c)
+	if *concurrent {
+		for _, n := range todo {
+			c := make(chan result)
+			channels = append(channels, c)
+			go runConcurrent(n, c)
 
+		}
 	}
-	for _, c := range channels {
-		result := <-c
+	for i, n := range todo {
+		var res result
+		if *concurrent {
+			res = <-channels[i]
+		} else {
+			res = run(n)
+		}
 		fmt.Fprintf(
 			w, "%v:\t%s\t%v\n",
-			result.id, result.solution, result.time,
+			res.id, res.solution, res.time,
 		)
 	}
 	fmt.Fprintf(w, "\t\t\nTotal:\t%d problem(s)\t%s\n", len(todo), time.Since(t0))
