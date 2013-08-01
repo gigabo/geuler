@@ -28,14 +28,19 @@ var solutions = map[string]func() string{
 	},
 }
 
-func run(n string) string {
+type result struct {
+	id, solution string
+	time         time.Duration
+}
+
+func run(n string) result {
 	t0 := time.Now()
 	solve := solutions[n]
 	solution := "No solution yet!"
 	if solve != nil {
 		solution = solve()
 	}
-	return fmt.Sprintf("%v:\t%s\t%v", n, solution, time.Since(t0))
+	return result{n, solution, time.Since(t0)}
 }
 
 func main() {
@@ -48,7 +53,11 @@ func main() {
 	}
 	w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
 	for _, n := range todo {
-		fmt.Fprintln(w, run(n))
+		result := run(n)
+		fmt.Fprintf(
+			w, "%v:\t%s\t%v\n",
+			result.id, result.solution, result.time,
+		)
 	}
 	fmt.Fprintf(w, "\t\t\nTotal:\t%d problem(s)\t%s\n", len(todo), time.Since(t0))
 	w.Flush()
