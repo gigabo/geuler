@@ -27,6 +27,10 @@ var solutions = map[string]func() string{
 		}
 		return fmt.Sprintf("%d", n)
 	},
+	"3": func() string {
+		n := uint(600851475143)
+		return fmt.Sprintf("%d", largestPrimeFactor(n))
+	},
 }
 
 type result struct {
