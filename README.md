@@ -1,1 +1,1 @@
-Solutions to Project Euler problems, in go.
+Solutions to [Project Euler](http://projecteuler.net/) problems, in [go](http://golang.org/).
