@@ -10,8 +10,11 @@ func isPrime(n uint) bool {
 }
 
 func largestPrimeFactor(n uint) uint {
-	var fact uint
-	for i := uint(2); i <= n; i++ {
+	fact := uint(2)
+	if isPrime(n) {
+		return n
+	}
+	for i := fact; i <= n/fact; i++ {
 		if n%i == 0 && isPrime(i) {
 			fact = i
 		}
