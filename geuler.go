@@ -19,10 +19,11 @@ var solutions = map[string]func() string{
 		return fmt.Sprintf("%d", n)
 	},
 	"2": func() string {
+		g := fibGenerator()
 		n := uint(0)
-		for i := uint(0); fib(i) < 4000000; i++ {
-			if (fib(i) % 2) == 0 {
-				n += fib(i)
+		for f := <-g; f < 4000000; f = <-g {
+			if (f % 2) == 0 {
+				n += f
 			}
 		}
 		return fmt.Sprintf("%d", n)
