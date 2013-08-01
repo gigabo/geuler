@@ -33,19 +33,20 @@ type result struct {
 	time         time.Duration
 }
 
-func run(n string) result {
+func run(n string, c chan result) {
 	t0 := time.Now()
 	solve := solutions[n]
 	solution := "No solution yet!"
 	if solve != nil {
 		solution = solve()
 	}
-	return result{n, solution, time.Since(t0)}
+	c <- result{n, solution, time.Since(t0)}
 }
 
 func main() {
 	t0 := time.Now()
 	todo := os.Args[1:]
+	var channels []chan result
 	if len(todo) == 0 {
 		for k, _ := range solutions {
 			todo = append(todo, k)
@@ -53,7 +54,13 @@ func main() {
 	}
 	w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
 	for _, n := range todo {
-		result := run(n)
+		c := make(chan result)
+		channels = append(channels, c)
+		go run(n, c)
+
+	}
+	for _, c := range channels {
+		result := <-c
 		fmt.Fprintf(
 			w, "%v:\t%s\t%v\n",
 			result.id, result.solution, result.time,
