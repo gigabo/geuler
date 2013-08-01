@@ -32,6 +32,19 @@ var solutions = map[string]func() string{
 		n := uint(600851475143)
 		return fmt.Sprintf("%d", largestPrimeFactor(n))
 	},
+	"4": func() string {
+		max := 0
+		for i := 999; i > 99; i-- {
+			for j := 999; j > 99; j-- {
+				if isPalindrome(i * j) {
+					if i*j > max {
+						max = i * j
+					}
+				}
+			}
+		}
+		return fmt.Sprintf("%d", max)
+	},
 }
 
 type result struct {
