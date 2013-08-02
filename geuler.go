@@ -45,6 +45,9 @@ var solutions = map[string]func() string{
 		}
 		return fmt.Sprintf("%d", max)
 	},
+	"5": func() string {
+		return fmt.Sprintf("%d", smallestMultiple(20))
+	},
 }
 
 type result struct {
